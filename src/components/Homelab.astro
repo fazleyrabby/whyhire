@@ -4,39 +4,39 @@ import { homelabData } from '../data/homelab';
 
 const infrastructureHighlights = [
   {
-    role: "HIGH-PERFORMANCE DATABASES",
-    tech: "MySQL 8.0 & Redis 7",
+    role: "WEB & APPLICATION SERVER",
+    tech: "FrankenPHP & Laravel (Worker Mode)",
+    instances: "High-Throughput Caddy",
+    memory: "PHP 8.3",
+    benefit: "Keeps Laravel boot in memory with worker mode, slashing response latency down to sub-10ms for production apps."
+  },
+  {
+    role: "EDGE INGRESS & ZERO OPEN PORTS",
+    tech: "Cloudflare Tunnels (cloudflared)",
+    instances: "Zero Attack Surface",
+    memory: "Auto TLS",
+    benefit: "Outbound-only encrypted tunnels route global traffic directly to Docker without port forwarding or exposed server IPs."
+  },
+  {
+    role: "PRIVATE SECURE REMOTE ACCESS",
+    tech: "Tailscale Mesh VPN (WireGuard)",
+    instances: "Encrypted Overlay",
+    memory: "NAT Traversal",
+    benefit: "Enables direct, secure SSH and management access from any device across firewalls and CGNAT with zero public exposure."
+  },
+  {
+    role: "AUTONOMOUS INFRASTRUCTURE AI",
+    tech: "Hermes Sysadmin Agent (Telegram)",
+    instances: "Shell & Container Ops",
+    memory: "Zero API Fees",
+    benefit: "Custom AI agent orchestrating shell commands, diagnosing 502/1033 errors, and managing cron jobs directly from my phone."
+  },
+  {
+    role: "HIGH-PERFORMANCE DATA STACK",
+    tech: "MySQL 8.0 & Redis 7 Caching",
     instances: "5 DB Instances Consolidated",
     memory: "386 MB",
-    benefit: "Tuned InnoDB buffer pools, query indexes, and sub-millisecond in-memory caching for extreme load resilience."
-  },
-  {
-    role: "AUTOMATED CI/CD BUILD ENGINE",
-    tech: "Ephemeral Docker Runners",
-    instances: "On-Demand Workers",
-    memory: "35 MB",
-    benefit: "Spawns ephemeral isolated containers via GitHub webhooks to test and deploy code in seconds without cloud CI bills."
-  },
-  {
-    role: "ZERO-TRUST SECURITY & REVERSE PROXY",
-    tech: "Traefik v3 & Tailscale Mesh",
-    instances: "Encrypted WireGuard",
-    memory: "Auto SSL",
-    benefit: "Zero exposed public ports. All microservices communicate across private encrypted channels with automated certificates."
-  },
-  {
-    role: "REAL-TIME OBSERVABILITY & METRICS",
-    tech: "Grafana 11.5 & Prometheus",
-    instances: "Full Telemetry Stack",
-    memory: "250 MB",
-    benefit: "Continuous tracking of container health, latency, and memory spikes to diagnose bottlenecks before users notice."
-  },
-  {
-    role: "ASYNC QUEUES & SELF-HOSTED AI",
-    tech: "Oblok Engine & Local LLMs",
-    instances: "5 Worker Nodes",
-    memory: "427 MB",
-    benefit: "Handles heavy background tasks, scheduled jobs, and private AI completions without vendor lock-in or rate limits."
+    benefit: "Tuned InnoDB buffer pools and sub-millisecond in-memory caching for extreme multi-tenant app load resilience."
   }
 ];
 ---
@@ -46,7 +46,7 @@ const infrastructureHighlights = [
     <div class="section-badge mono text-accent">[04 // FULL-STACK OWNERSHIP]</div>
     <h2 class="section-title">SERVER ARCHITECTURE & DEVOPS</h2>
     <p class="section-subtitle">
-      I don't just write application code—I configure and manage the Linux servers, databases, and networks that keep systems fast, secure, and resilient.
+      I don't just write application code—I run a production bare-metal server powering real applications, zero-trust networks, and autonomous AI infrastructure.
     </p>
 
     <div class="homelab-dashboard glass-panel">
@@ -59,7 +59,7 @@ const infrastructureHighlights = [
           loading="lazy"
         />
         <div class="topology-overlay">
-          <span class="mono text-accent">[SYSTEM TOPOLOGY // PRIVATE MESH & DOCKER CLUSTER]</span>
+          <span class="mono text-accent">[SYSTEM TOPOLOGY // CLOUDFLARE + TAILSCALE + FRANKENPHP + HERMES AI]</span>
         </div>
       </div>
 
@@ -71,18 +71,18 @@ const infrastructureHighlights = [
         </div>
         <div class="telemetry-box">
           <div class="telemetry-num text-accent mono">99.98%</div>
-          <div class="telemetry-desc mono">SYSTEM UPTIME (UBUNTU HOST)</div>
+          <div class="telemetry-desc mono">SYSTEM UPTIME (BARE-METAL HOST)</div>
         </div>
         <div class="telemetry-box">
           <div class="telemetry-num text-accent mono">ZERO PORTS</div>
-          <div class="telemetry-desc mono">PUBLICLY EXPOSED (ENCRYPTED MESH)</div>
+          <div class="telemetry-desc mono">PUBLICLY EXPOSED (ZERO-TRUST MESH)</div>
         </div>
       </div>
 
       {/* Clear, Plain-English Infrastructure Capabilities */}
       <div class="server-rack">
-        {infrastructureHighlights.map((item, index) => (
-          <div class="server-blade" style={`--delay: ${index * 0.08}s`}>
+        {infrastructureHighlights.map((item) => (
+          <div class="server-blade">
             <div class="blade-header">
               <div class="blade-titles">
                 <span class="blade-role mono text-accent">{item.role}</span>
@@ -96,6 +96,23 @@ const infrastructureHighlights = [
             <p class="blade-benefit">{item.benefit}</p>
           </div>
         ))}
+      </div>
+
+      {/* Deep-Dive Article CTA */}
+      <div class="article-cta glass-panel">
+        <div class="cta-content">
+          <span class="cta-tag mono text-accent">DEEP-DIVE ARTICLE</span>
+          <h4 class="cta-title">Running a Production-Grade Homelab on Bare Metal</h4>
+          <p class="cta-desc">Read the full breakdown on routing, Cloudflare tunnels, error recovery (502 & 1033), and zero-cost AI agents.</p>
+        </div>
+        <a 
+          href="https://fazleyrabbi.xyz/posts/running-a-production-grade-homelab-on-bare-metal" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="cta-button mono"
+        >
+          READ ARCHITECTURE POST →
+        </a>
       </div>
     </div>
   </div>
@@ -114,7 +131,7 @@ const infrastructureHighlights = [
   }
   
   .section-subtitle {
-    max-width: 750px;
+    max-width: 780px;
     color: var(--color-text-muted);
     margin-bottom: 3rem;
     font-size: 1.1rem;
@@ -141,7 +158,7 @@ const infrastructureHighlights = [
   .topology-img {
     width: 100%;
     height: auto;
-    max-height: 440px;
+    max-height: 460px;
     object-fit: cover;
     object-position: center;
     display: block;
@@ -198,6 +215,7 @@ const infrastructureHighlights = [
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    margin-bottom: 2rem;
   }
 
   .server-blade {
@@ -270,6 +288,54 @@ const infrastructureHighlights = [
     line-height: 1.6;
   }
 
+  .article-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.75rem 2rem;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 8px;
+  }
+
+  .cta-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .cta-title {
+    font-size: 1.2rem;
+    margin: 0 0 0.25rem 0;
+    color: var(--color-text);
+  }
+
+  .cta-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .cta-button {
+    padding: 0.85rem 1.5rem;
+    background: var(--color-accent);
+    color: #030712;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  .cta-button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+
   @media (max-width: 768px) {
     .homelab-dashboard {
       padding: 1.25rem;
@@ -281,6 +347,15 @@ const infrastructureHighlights = [
     .blade-meta {
       flex-wrap: wrap;
       gap: 0.5rem;
+    }
+    .article-cta {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.25rem;
+    }
+    .cta-button {
+      width: 100%;
+      text-align: center;
     }
   }
 </style>
