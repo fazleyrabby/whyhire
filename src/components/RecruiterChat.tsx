@@ -6,6 +6,7 @@ const chatSequence = [
   { sender: 'AI', text: 'Absolutely! Here\'s 2,000 lines of code.' },
   { sender: 'Fazley', text: 'Hold on.' },
   { sender: 'Fazley', text: 'REVIEW CHECKLIST:\n✓ Idempotency\n✓ Webhook verification\n✓ Retry handling\n✓ Transaction state\n✓ Duplicate event protection\n✓ Failure handling\n✓ Security\n✓ Testing' },
+  { sender: 'Fazley', text: 'And if it’s an obscure edge-case? I turn AI into an obsessive interrogation tool to hunt down 99.99% of hidden landmines.' },
   { sender: 'Fazley', text: 'That’s what you actually hire an engineer for.' }
 ];
 
@@ -33,7 +34,7 @@ export default function RecruiterChat() {
 
   useEffect(() => {
     if (isVisible && messages < chatSequence.length) {
-      const delay = messages === 0 ? 500 : messages === 1 ? 1500 : messages === 3 ? 1500 : 2000;
+      const delay = messages === 0 ? 500 : messages === 1 ? 1500 : messages === 3 ? 1500 : messages === 4 ? 1500 : 2000;
       const timer = setTimeout(() => {
         setMessages(m => m + 1);
       }, delay);
@@ -47,7 +48,7 @@ export default function RecruiterChat() {
         <div className="section-badge mono text-accent">[03 // AI PHILOSOPHY & AGENTS]</div>
         <h2 className="section-title">NEED A VIBE CODER?</h2>
         <p className="section-subtitle">
-          I tinker with AI constantly—building autonomous agents, self-hosting open-weight LLMs, and stress-testing failure boundaries. But when it comes to production, I apply strict human engineering judgment.
+          I tinker with AI constantly—building autonomous agents, self-hosting open-weight LLMs, and stress-testing failure boundaries. But when something is ridiculously difficult, I turn AI into an obsessive simulator to root out 99.99% of hidden issues.
         </p>
 
         {/* AI Competency Pillars */}
@@ -61,7 +62,11 @@ export default function RecruiterChat() {
             <p>Building automated tool-calling pipelines, stress-testing prompts, and breaking models on purpose.</p>
           </div>
           <div className="ai-principle-card glass-panel">
-            <span className="text-accent font-bold">03 // ZERO HALLUCINATIONS</span>
+            <span className="text-accent font-bold">03 // 99.99% EDGE-CASE RADAR</span>
+            <p>Stuck on an impossible bug? I turn AI into a simulation engine to predict and neutralize 99.99% of edge-case disasters.</p>
+          </div>
+          <div className="ai-principle-card glass-panel">
+            <span className="text-accent font-bold">04 // ZERO HALLUCINATIONS</span>
             <p>Strict human code verification on concurrency, database locks, idempotency, and security.</p>
           </div>
         </div>

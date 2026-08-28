@@ -59,10 +59,22 @@ export default function DevTerminal() {
             <p>  <span className="text-accent font-bold">sudo hire fazley</span> - Initiate immediate hire sequence</p>
             <p>  <span className="text-accent font-bold">stats</span>            - Print production engineering metrics</p>
             <p>  <span className="text-accent font-bold">stack</span>            - View battle-tested tech stack</p>
+            <p>  <span className="text-accent font-bold">superpower</span>       - The 99.99% edge-case & AI debugging radar</p>
             <p>  <span className="text-accent font-bold">vibe</span>             - Check AI & engineering philosophy</p>
             <p>  <span className="text-accent font-bold">homelab</span>          - Live server infrastructure telemetry</p>
             <p>  <span className="text-accent font-bold">contact</span>          - Direct communication endpoints</p>
             <p>  <span className="text-accent font-bold">clear</span>            - Clear terminal window</p>
+          </div>
+        );
+        break;
+
+      case 'superpower':
+      case 'edgecases':
+        output = (
+          <div className="text-emerald-300">
+            <p>⚡ <span className="text-accent font-bold">THE 99.99% EDGE-CASE RADAR:</span></p>
+            <p>Hit an impossibly obscure bug with zero StackOverflow results?</p>
+            <p>I turn AI into an obsessive simulation engine—interrogating failure surfaces, stress-testing hypotheses, and neutralizing 99.99% of hidden landmines before they ever touch production.</p>
           </div>
         );
         break;
@@ -150,7 +162,7 @@ export default function DevTerminal() {
     }
   };
 
-  const quickChips = ['sudo hire fazley', 'stats', 'stack', 'vibe', 'contact'];
+  const quickChips = ['sudo hire fazley', 'stats', 'superpower', 'stack', 'vibe', 'contact'];
 
   return (
     <>
