@@ -4,18 +4,10 @@ export interface TinkeringProject {
   description: string;
   tech: string[];
   link: string;
-  type: 'terminal' | 'game' | 'math' | 'experiment' | 'ai';
+  type: 'terminal' | 'game' | 'math' | 'experiment';
 }
 
 export const tinkeringProjects: TinkeringProject[] = [
-  {
-    id: "ai-sandbox",
-    title: "Local LLM & Agent Sandbox",
-    description: "Self-hosting open-weight models (Qwen, Ollama), testing tool-calling pipelines, and stress-testing autonomous agents to explore their real-world reliability limits.",
-    tech: ["Qwen 2.5", "Ollama", "Tool Use", "Agents"],
-    link: "https://fazleyrabbi.xyz/",
-    type: "ai"
-  },
   {
     id: "8bit-os",
     title: "8Bit OS",
