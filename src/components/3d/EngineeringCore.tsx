@@ -1,49 +1,51 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Subtle, ambient data field: Slow, calming particle drift that stays out of the text's way
+// 1. Subtle Galaxy Spiral / Dust Field
+const GalaxyDust = ({ count = 600, radius = 25 }) => {
+  const pointsRef = useRef<THREE.Points>(null);
 
-const AmbientDataField = ({ count = 180, radius = 12 }) => {
-  const points = useRef<THREE.Points>(null);
-
-  const { positions, speeds, phases } = useMemo(() => {
+  const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(count * 3);
-    const spd = new Float32Array(count);
-    const phs = new Float32Array(count);
+    const col = new Float32Array(count * 3);
+
+    const colorInside = new THREE.Color('#10b981'); // Emerald
+    const colorOutside = new THREE.Color('#06b6d4'); // Soft Cyan
+    const colorDust = new THREE.Color('#94a3b8'); // Muted Slate
 
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * radius * 2;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * radius * 1.5;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * radius * 1.5;
-      // Gentle, calm upward/z drift
-      spd[i] = 0.003 + Math.random() * 0.006;
-      phs[i] = Math.random() * Math.PI * 2;
+      // Spiral galaxy branch distribution
+      const r = Math.random() * radius;
+      const spinAngle = r * 0.4;
+      const branchAngle = ((i % 3) * (2 * Math.PI)) / 3;
+
+      const randomX = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.3 * radius);
+      const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.2 * radius);
+      const randomZ = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.3 * radius);
+
+      pos[i * 3] = Math.cos(branchAngle + spinAngle) * r + randomX;
+      pos[i * 3 + 1] = randomY - 2;
+      pos[i * 3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
+
+      // Color interpolation from core to arms
+      const mixedColor = colorInside.clone().lerp(r > radius * 0.5 ? colorOutside : colorDust, r / radius);
+      col[i * 3] = mixedColor.r;
+      col[i * 3 + 1] = mixedColor.g;
+      col[i * 3 + 2] = mixedColor.b;
     }
-    return { positions: pos, speeds: spd, phases: phs };
+    return { positions: pos, colors: col };
   }, [count, radius]);
 
   useFrame((state) => {
-    if (!points.current) return;
-    const pos = points.current.geometry.attributes.position.array as Float32Array;
-    const time = state.clock.getElapsedTime();
-
-    for (let i = 0; i < count; i++) {
-      // Gentle floating motion
-      pos[i * 3 + 1] += speeds[i] * 0.5; // slow upward drift
-      pos[i * 3] += Math.sin(time * 0.3 + phases[i]) * 0.003; // subtle horizontal sway
-      pos[i * 3 + 2] += speeds[i]; // slow depth drift
-
-      // Reset when out of bounds for seamless infinite loop
-      if (pos[i * 3 + 1] > radius * 0.75) pos[i * 3 + 1] = -radius * 0.75;
-      if (pos[i * 3 + 2] > radius * 0.75) pos[i * 3 + 2] = -radius * 0.75;
-    }
-    points.current.geometry.attributes.position.needsUpdate = true;
+    if (!pointsRef.current) return;
+    // Extremely slow, majestic galaxy rotation
+    pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.02;
   });
 
   return (
-    <points ref={points}>
+    <points ref={pointsRef}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -51,12 +53,18 @@ const AmbientDataField = ({ count = 180, radius = 12 }) => {
           array={positions}
           itemSize={3}
         />
+        <bufferAttribute
+          attach="attributes-color"
+          count={colors.length / 3}
+          array={colors}
+          itemSize={3}
+        />
       </bufferGeometry>
       <pointsMaterial 
-        size={0.045} 
-        color="#10b981" 
+        size={0.055} 
+        vertexColors 
         transparent 
-        opacity={0.3} 
+        opacity={0.35} 
         blending={THREE.AdditiveBlending}
         sizeAttenuation
       />
@@ -64,20 +72,77 @@ const AmbientDataField = ({ count = 180, radius = 12 }) => {
   );
 };
 
-const SubtleGrid = () => {
+// 2. Occasional Subtle Shooting Star
+const ShootingStar = () => {
+  const lineRef = useRef<THREE.LineSegments>(null);
+  const [active, setActive] = useState(false);
+  const startPos = useRef(new THREE.Vector3());
+  const velocity = useRef(new THREE.Vector3());
+  const progress = useRef(0);
+
+  const resetStar = () => {
+    // Spawn in random upper sky area
+    startPos.current.set(
+      (Math.random() - 0.5) * 30,
+      8 + Math.random() * 8,
+      -10 - Math.random() * 15
+    );
+    // Angle downwards diagonally
+    velocity.current.set(
+      -15 - Math.random() * 10,
+      -8 - Math.random() * 6,
+      Math.random() * 5
+    ).normalize().multiplyScalar(0.35); // Smooth streak speed
+
+    progress.current = 0;
+    setActive(true);
+  };
+
+  useEffect(() => {
+    // Trigger periodically every 3 to 6 seconds
+    const interval = setInterval(() => {
+      if (!active) resetStar();
+    }, 3500 + Math.random() * 3000);
+    return () => clearInterval(interval);
+  }, [active]);
+
+  useFrame(() => {
+    if (!active || !lineRef.current) return;
+
+    progress.current += 1;
+    const trailLength = 1.8;
+
+    const currentHead = startPos.current.clone().add(velocity.current.clone().multiplyScalar(progress.current * 1.5));
+    const currentTail = currentHead.clone().sub(velocity.current.clone().multiplyScalar(trailLength));
+
+    const positions = new Float32Array([
+      currentHead.x, currentHead.y, currentHead.z,
+      currentTail.x, currentTail.y, currentTail.z
+    ]);
+
+    lineRef.current.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    // Despawn after traveling
+    if (progress.current > 40) {
+      setActive(false);
+    }
+  });
+
+  if (!active) return null;
+
   return (
-    <gridHelper 
-      args={[40, 40, '#1f2937', '#0f172a']} 
-      position={[0, -4, 0]} 
-    />
+    <lineSegments ref={lineRef}>
+      <bufferGeometry />
+      <lineBasicMaterial color="#a7f3d0" transparent opacity={0.5} linewidth={2} />
+    </lineSegments>
   );
 };
 
+// 3. Gentle Camera Rig following cursor
 const CameraRig = () => {
   useFrame((state) => {
-    // Subtle, smooth camera parallax following mouse
-    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 0.8, 0.03);
-    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.5, 0.03);
+    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 0.8, 0.025);
+    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.4, 0.025);
     state.camera.lookAt(0, 0, 0);
   });
   return null;
@@ -88,20 +153,20 @@ const Scene = () => {
     <>
       <ambientLight intensity={0.05} />
       
-      {/* Calm, distant dust stars */}
-      <Stars radius={40} depth={40} count={1200} factor={2} saturation={0} fade speed={0.2} />
+      {/* Background Starfield */}
+      <Stars radius={50} depth={40} count={1800} factor={2.5} saturation={0} fade speed={0.15} />
       
-      {/* Slow, ambient data particles */}
-      <AmbientDataField count={180} radius={14} />
+      {/* Subtle Rotating Galaxy Spiral */}
+      <GalaxyDust count={750} radius={22} />
       
-      {/* Soft structural infrastructure grid */}
-      <SubtleGrid />
+      {/* Occasional Subtle Shooting Star */}
+      <ShootingStar />
       
-      {/* Gentle mouse parallax */}
+      {/* Mouse Parallax Rig */}
       <CameraRig />
       
-      {/* Deep fog to keep background dark and text readable */}
-      <fog attach="fog" args={['#030712', 6, 20]} />
+      {/* Dark Ambient Fog to preserve high text contrast */}
+      <fog attach="fog" args={['#030712', 8, 28]} />
     </>
   );
 };
@@ -109,7 +174,7 @@ const Scene = () => {
 export default function EngineeringCore() {
   return (
     <Canvas 
-      camera={{ position: [0, 0, 8], fov: 45 }}
+      camera={{ position: [0, 0, 10], fov: 45 }}
       gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
       dpr={[1, 1.5]}
     >
