@@ -10,6 +10,7 @@ import Homelab from '../components/Homelab.astro';
 import TinkeringLab from '../components/TinkeringLab.astro';
 import Contact from '../components/Contact.astro';
 import DevTerminal from '../components/DevTerminal';
+import FloatingStickers from '../components/FloatingStickers';
 ---
 
 <Layout title="Md. Fazley Rabbi | PHP/Laravel Engineer">
@@ -39,6 +40,9 @@ import DevTerminal from '../components/DevTerminal';
 
   <!-- Interactive Floating Dev Console -->
   <DevTerminal client:load />
+
+  {/* Draggable Floating Tech Stickers */}
+  {/* <FloatingStickers client:load /> */}
 </Layout>
 
 <style>
