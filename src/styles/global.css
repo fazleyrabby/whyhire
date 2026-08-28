@@ -2,9 +2,9 @@
 
 :root {
   --color-bg: #030712;
-  --color-bg-glass: rgba(17, 24, 39, 0.4);
-  --color-surface: rgba(31, 41, 55, 0.5);
-  --color-border: rgba(55, 65, 81, 0.5);
+  --color-bg-card: #0b0f19;
+  --color-surface: #111827;
+  --color-border: rgba(255, 255, 255, 0.08);
   
   /* Primary typography */
   --color-text: #f9fafb;
@@ -15,10 +15,10 @@
   --color-accent-glow: rgba(16, 185, 129, 0.2);
   --color-secondary: #3b82f6; /* Blue for data/system nodes */
 
-  /* Glassmorphism Variables */
-  --glass-panel-bg: rgba(17, 24, 39, 0.6);
-  --glass-dark-bg: rgba(0, 0, 0, 0.4);
-  --glass-light-bg: rgba(255, 255, 255, 0.05);
+  /* Solid Premium Panel Variables */
+  --glass-panel-bg: #0b0f19;
+  --glass-dark-bg: #070a12;
+  --glass-light-bg: #111827;
   
   --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
@@ -94,12 +94,10 @@ button:focus-visible, a:focus-visible {
 }
 
 .glass-panel {
-  background: var(--color-bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--glass-panel-bg);
   border: 1px solid var(--color-border);
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
 }
 
 .container {

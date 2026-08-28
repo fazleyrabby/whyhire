@@ -126,7 +126,9 @@ export default function RecruiterChat() {
         .ai-principle-card {
           padding: 1.25rem 1.5rem;
           font-size: 0.85rem;
-          border: 1px solid var(--color-border);
+          background: #0b0f19;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
         }
         .ai-principle-card span {
           display: block;
@@ -146,7 +148,9 @@ export default function RecruiterChat() {
           display: flex;
           flex-direction: column;
           gap: 1.25rem;
-          border: 1px solid var(--color-border);
+          background: #0b0f19;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
         }
         .chat-window-bar {
           display: flex;
