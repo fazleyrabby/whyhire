@@ -4,11 +4,12 @@ import { tinkeringProjects } from '../data/tinkering';
 
 <section id="tinkering-lab" class="section">
   <div class="container">
+    <div class="section-badge mono text-accent">[05 // R&D, EXPERIMENTS & AI]</div>
     <h2 class="section-title">
-      <span class="text-accent">02 //</span> THINGS I BUILD WHEN NOBODY ASKED ME TO.
+      THINGS I BUILD WHEN NOBODY ASKED ME TO.
     </h2>
     <p class="section-subtitle">
-      Professional work shows what I can deliver. These projects show how I think when I'm curious.
+      From generative code experiments and retro UIs to local LLM agents and pipeline toys—I tinker constantly. Building, hacking, and breaking systems on purpose to truly master how they work under the hood.
     </p>
 
     <div class="lab-grid">
@@ -36,16 +37,23 @@ import { tinkeringProjects } from '../data/tinkering';
 </section>
 
 <style>
+  .section-badge {
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
   .section-title {
     margin-bottom: 1rem;
     font-size: clamp(2rem, 4vw, 3rem);
   }
   
   .section-subtitle {
-    max-width: 600px;
+    max-width: 800px;
     color: var(--color-text-muted);
-    margin-bottom: 4rem;
-    font-size: 1.125rem;
+    margin-bottom: 3.5rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
   }
 
   .lab-grid {

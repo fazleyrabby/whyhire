@@ -44,13 +44,36 @@ export default function RecruiterChat() {
   return (
     <section className="section" id="vibe-coder">
       <div className="container">
-        <h2 className="section-title text-accent">NEED A VIBE CODER?</h2>
+        <div className="section-badge mono text-accent">[03 // AI PHILOSOPHY & AGENTS]</div>
+        <h2 className="section-title">NEED A VIBE CODER?</h2>
         <p className="section-subtitle">
-          I can prompt the AI. I can review the AI. I can debug the AI.<br/>
-          I can tell the AI it's wrong. And I can ship the result.
+          I tinker with AI constantly—building autonomous agents, self-hosting open-weight LLMs, and stress-testing failure boundaries. But when it comes to production, I apply strict human engineering judgment.
         </p>
+
+        {/* AI Competency Pillars */}
+        <div className="ai-principles-grid mono">
+          <div className="ai-principle-card glass-panel">
+            <span className="text-accent font-bold">01 // LOCAL LLM INFRA</span>
+            <p>Self-hosting open-weight models (Qwen 2.5, Ollama) on private Ubuntu VPS servers.</p>
+          </div>
+          <div className="ai-principle-card glass-panel">
+            <span className="text-accent font-bold">02 // AGENTS & TOOL-USE</span>
+            <p>Building automated tool-calling pipelines, stress-testing prompts, and breaking models on purpose.</p>
+          </div>
+          <div className="ai-principle-card glass-panel">
+            <span className="text-accent font-bold">03 // ZERO HALLUCINATIONS</span>
+            <p>Strict human code verification on concurrency, database locks, idempotency, and security.</p>
+          </div>
+        </div>
         
         <div className="chat-container glass-panel" ref={containerRef}>
+          <div className="chat-window-bar mono text-muted">
+            <div className="chat-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span>session: vibe_vs_engineer.sh</span>
+          </div>
+
           <AnimatePresence>
             {chatSequence.slice(0, messages).map((msg, idx) => (
               <motion.div
@@ -84,19 +107,67 @@ export default function RecruiterChat() {
       </div>
 
       <style>{`
+        .section-badge {
+          font-size: 0.85rem;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.5rem;
+        }
+        .ai-principles-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 1.25rem;
+          margin-bottom: 3rem;
+        }
+        .ai-principle-card {
+          padding: 1.25rem 1.5rem;
+          font-size: 0.85rem;
+          border: 1px solid var(--color-border);
+        }
+        .ai-principle-card span {
+          display: block;
+          margin-bottom: 0.4rem;
+          letter-spacing: 0.05em;
+        }
+        .ai-principle-card p {
+          color: var(--color-text-muted);
+          line-height: 1.5;
+          margin: 0;
+        }
         .chat-container {
-          max-width: 600px;
+          max-width: 650px;
           margin: 0 auto;
-          padding: 2rem;
-          min-height: 450px;
+          padding: 1.5rem 2rem 2rem 2rem;
+          min-height: 460px;
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 1.25rem;
+          border: 1px solid var(--color-border);
         }
+        .chat-window-bar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-bottom: 0.75rem;
+          border-bottom: 1px solid var(--color-border);
+          font-size: 0.75rem;
+        }
+        .chat-dots {
+          display: flex;
+          gap: 5px;
+        }
+        .chat-dots span {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--color-border);
+        }
+        .chat-dots span:nth-child(1) { background: #ef4444; }
+        .chat-dots span:nth-child(2) { background: #f59e0b; }
+        .chat-dots span:nth-child(3) { background: #10b981; }
         .chat-message {
           display: flex;
           flex-direction: column;
-          max-width: 80%;
+          max-width: 85%;
         }
         .chat-message.recruiter {
           align-self: flex-start;
@@ -120,16 +191,16 @@ export default function RecruiterChat() {
           font-size: 0.95rem;
         }
         .recruiter .message-bubble {
-          background: rgba(255,255,255,0.1);
+          background: rgba(255,255,255,0.08);
           border-bottom-left-radius: 0;
         }
         .ai .message-bubble {
-          background: rgba(59, 130, 246, 0.15); /* blueish */
-          border: 1px solid rgba(59, 130, 246, 0.3);
+          background: rgba(59, 130, 246, 0.12);
+          border: 1px solid rgba(59, 130, 246, 0.25);
           border-bottom-left-radius: 0;
         }
         .fazley .message-bubble {
-          background: rgba(16, 185, 129, 0.15); /* green/accent */
+          background: rgba(16, 185, 129, 0.12);
           border: 1px solid var(--color-accent);
           color: var(--color-accent);
           border-bottom-right-radius: 0;
