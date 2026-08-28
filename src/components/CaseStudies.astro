@@ -1,0 +1,337 @@
+---
+const cases = [
+  {
+    id: "bundle",
+    title: "THE BUNDLE PROBLEM",
+    problem: "The platform needed to support complex product bundles while maintaining pricing, inventory, cart, checkout, and payment consistency.",
+    result: "30%+ INCREASE IN SALES",
+    resultDesc: "IMPROVED AVERAGE ORDER VALUE",
+  },
+  {
+    id: "payment",
+    title: "PAYMENT SYSTEMS",
+    problem: "Multi-gateway integrations, currency conversions, idempotent webhooks, and complex payment state management.",
+    tech: ["PayPal", "Checkout.com", "Apple Pay", "Google Pay"],
+  },
+  {
+    id: "fraud",
+    title: "FRAUD DETECTION",
+    problem: "Risk scoring and velocity checks to automatically block or flag suspicious transactions.",
+    tech: ["IP Velocity", "Card Velocity", "BIN/ASN Validation"],
+  },
+  {
+    id: "analytics",
+    title: "ANALYTICS & SCALE",
+    problem: "High-volume sub-second reporting pipelines for customer behavior, revenue, and transaction fees.",
+    tech: ["ClickHouse", "Event Pipeline", "Reporting"],
+  },
+  {
+    id: "performance",
+    title: "PERFORMANCE",
+    problem: "Database optimization, read replicas, and caching strategies to handle extreme load spikes.",
+    tech: ["Redis", "MySQL Read Replicas", "Queue Workers"],
+  }
+];
+---
+
+<div class="case-studies-container">
+  {cases.map((c, idx) => (
+    <div class="case-card glass-panel">
+      <div class="case-content">
+        <h3 class="case-title">{c.title}</h3>
+        <p class="case-problem">{c.problem}</p>
+        
+        {c.tech && (
+          <div class="case-tech mono">
+            {c.tech.map(t => <span>{t}</span>)}
+          </div>
+        )}
+        
+        {c.result && (
+          <div class="case-result">
+            <div class="result-metric text-accent">{c.result}</div>
+            <div class="result-desc mono">{c.resultDesc}</div>
+          </div>
+        )}
+      </div>
+      
+      <div class="case-diagram">
+        {c.id === 'bundle' && (
+          <div class="flow-diagram">
+            <div class="flow-row multi-input">
+              <div class="flow-node">PRODUCT A</div>
+              <div class="flow-node">PRODUCT B</div>
+              <div class="flow-node">PRODUCT C</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node highlight">BUNDLE ENGINE</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">CART STATE</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">CHECKOUT / PAYMENT</div>
+          </div>
+        )}
+
+        {c.id === 'payment' && (
+          <div class="flow-diagram">
+            <div class="flow-node">PAYMENT REQUEST</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">GATEWAY (EXTERNAL)</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node highlight">WEBHOOK RECEIVER</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">IDEMPOTENCY CHECK</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-row split">
+              <div class="flow-node">EVENT QUEUE</div>
+              <div class="flow-node highlight">TRANSACTION DB</div>
+            </div>
+          </div>
+        )}
+
+        {c.id === 'fraud' && (
+          <div class="flow-diagram">
+            <div class="flow-row multi-input small">
+              <div class="flow-node">IP</div>
+              <div class="flow-node">CARD</div>
+              <div class="flow-node">EMAIL</div>
+              <div class="flow-node">BIN</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node highlight">RISK SCORING ENGINE</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-row split">
+              <div class="flow-node text-green">ALLOW</div>
+              <div class="flow-node text-yellow">REVIEW</div>
+              <div class="flow-node text-red">BLOCK</div>
+            </div>
+          </div>
+        )}
+
+        {c.id === 'analytics' && (
+          <div class="flow-diagram">
+            <div class="flow-row multi-input small">
+              <div class="flow-node">USERS</div>
+              <div class="flow-node">ORDERS</div>
+              <div class="flow-node">PAYMENTS</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">EVENT PIPELINE</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node highlight">CLICKHOUSE CLUSTER</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node">REAL-TIME REPORTING</div>
+          </div>
+        )}
+
+        {c.id === 'performance' && (
+          <div class="flow-diagram">
+            <div class="flow-node">CLIENT REQUEST</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-node highlight">CACHE LAYER?</div>
+            <div class="flow-row split arrows-split">
+              <div class="split-branch">
+                <div class="flow-arrow">YES</div>
+                <div class="flow-node">REDIS (Sub-ms)</div>
+              </div>
+              <div class="split-branch">
+                <div class="flow-arrow">NO</div>
+                <div class="flow-node">MYSQL MASTER</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node">READ REPLICA</div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .case-studies-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .case-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--glass-panel-bg);
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  
+  @media (min-width: 768px) {
+    .case-card {
+      flex-direction: row;
+    }
+  }
+
+  .case-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent);
+  }
+
+  .case-content {
+    flex: 1;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .case-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .case-problem {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .case-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .case-tech span {
+    padding: 0.25rem 0.75rem;
+    background: var(--glass-light-bg);
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+  }
+
+  .case-result {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px dashed var(--color-border);
+  }
+
+  .result-metric {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+
+  .result-desc {
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+  }
+
+  .case-diagram {
+    flex: 1;
+    background: var(--glass-dark-bg);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--color-border);
+  }
+
+  /* Node Diagram Styles */
+  .flow-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .flow-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .flow-row.split {
+    gap: 2rem;
+  }
+
+  .flow-node {
+    padding: 0.75rem 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    text-align: center;
+    color: var(--color-text-muted);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .flow-node.highlight {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 15px var(--color-accent-glow);
+    background: rgba(16, 185, 129, 0.05);
+    font-weight: bold;
+  }
+
+  .flow-arrow {
+    color: var(--color-accent);
+    padding: 0.5rem 0;
+    font-weight: bold;
+    opacity: 0.7;
+  }
+
+  .multi-input {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1rem;
+    position: relative;
+  }
+  
+  .multi-input::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    height: 1rem;
+    background: var(--color-border);
+    transform: translateX(-50%);
+  }
+
+  .multi-input .flow-node {
+    flex: 1;
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .text-green { color: #10b981; border-color: #10b981; }
+  .text-yellow { color: #f59e0b; border-color: #f59e0b; }
+  .text-red { color: #ef4444; border-color: #ef4444; }
+
+  .split-branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .case-diagram {
+      padding: 1.5rem;
+      border-left: none;
+      border-top: 1px solid var(--color-border);
+      overflow-x: auto;
+    }
+    .flow-node {
+      font-size: 0.7rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+</style>

@@ -1,17 +1,54 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ExecutiveSummary from '../components/ExecutiveSummary.astro';
+import EngineeringCore from '../components/3d/EngineeringCore';
+import CaseStudiesConsole from '../components/CaseStudiesConsole';
+import IncidentSimulator from '../components/IncidentSimulator';
+import RecruiterChat from '../components/RecruiterChat';
+import Homelab from '../components/Homelab.astro';
+import TinkeringLab from '../components/TinkeringLab.astro';
+import Contact from '../components/Contact.astro';
+import DevTerminal from '../components/DevTerminal';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Md. Fazley Rabbi | PHP/Laravel Engineer">
+  <!-- React Island for the 3D Background -->
+  <div id="webgl-container">
+    <EngineeringCore client:load />
+  </div>
+
+  <Hero />
+  <ExecutiveSummary />
+  
+  <section id="proof" class="section">
+    <div class="container">
+      <h2 class="section-title"><span class="text-accent">02 //</span> I DON'T JUST LIST TECHNOLOGIES.</h2>
+      <p class="section-subtitle">HERE'S WHAT I'VE ACTUALLY BUILT IN PRODUCTION.</p>
+      <CaseStudiesConsole client:visible />
+    </div>
+  </section>
+
+  <IncidentSimulator client:visible />
+  <RecruiterChat client:visible />
+
+  <Homelab />
+  <TinkeringLab />
+
+  <Contact />
+
+  <!-- Interactive Floating Dev Console -->
+  <DevTerminal client:load />
+</Layout>
+
+<style>
+  #webgl-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+</style>

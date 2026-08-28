@@ -1,0 +1,110 @@
+---
+// src/components/ExecutiveSummary.astro
+---
+
+<section id="executive-summary" class="section">
+  <div class="container">
+    <div class="summary-card glass-panel">
+      <div class="summary-header">
+        <span class="mono text-accent">[01 // RECRUITER & CLIENT QUICK SUMMARY]</span>
+        <h2 class="summary-title">DON'T HAVE TIME? HERE'S THE 30-SECOND VERSION.</h2>
+      </div>
+
+      <p class="summary-lead">
+        I’m a <strong>PHP / Laravel Engineer with 5+ years of production experience</strong> building high-reliability backend systems, multi-gateway payments, e-commerce architectures, and high-volume analytics pipelines. I specialize in taking ownership of messy, mission-critical problems and turning them into stable, performant software.
+      </p>
+
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-number text-accent mono">5+ YEARS</div>
+          <div class="metric-label">PRODUCTION PHP & LARAVEL</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="metric-number text-accent mono">30%+</div>
+          <div class="metric-label">SALES IMPACT (BUNDLE LOGIC)</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="metric-number text-accent mono">54+</div>
+          <div class="metric-label">LIVE DOCKER CONTAINERS (HOMELAB)</div>
+        </div>
+      </div>
+
+      <div class="summary-actions">
+        <a href="#proof" class="btn btn-primary">Explore Proof & Architecture</a>
+        <a href="mailto:fazley111@gmail.com" class="btn btn-outline">Direct Contact</a>
+        <a href="https://fazleyrabbi.xyz/" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Standard Portfolio ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .summary-card {
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .summary-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-title {
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    margin-top: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .summary-lead {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    max-width: 900px;
+    margin-bottom: 2.5rem;
+  }
+
+  .summary-lead strong {
+    color: var(--color-text);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .metric-box {
+    padding: 1.5rem;
+    background: var(--glass-light-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .metric-number {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+
+  .metric-label {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .summary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .summary-card {
+      padding: 1.5rem;
+    }
+  }
+</style>

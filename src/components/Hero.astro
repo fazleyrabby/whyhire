@@ -1,0 +1,160 @@
+---
+// src/components/Hero.astro
+---
+
+<section class="section hero" aria-label="Introduction">
+  <div class="container">
+    <div class="hero-content">
+      <div class="status-indicator" aria-hidden="true">
+        <span class="status-text">STATUS // OPERATIONAL</span>
+        <span class="badge-tag mono">PROD-SURVIVOR 🛡️</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="title-sub">WHY HIRE ME?</span>
+        I build systems <br />
+        that survive production.
+      </h1>
+
+      <p class="hero-tagline mono text-muted">
+        "I break things on localhost so your users never cry in production."
+      </p>
+
+      <div class="hero-meta mono">
+        <ul class="meta-list">
+          <li>PHP / Laravel Engineer</li>
+          <li>5+ years</li>
+        </ul>
+        <ul class="meta-list tags">
+          <li>Payments</li>
+          <li>E-commerce</li>
+          <li>APIs</li>
+          <li>Data</li>
+          <li>Scale</li>
+        </ul>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#proof" class="btn btn-primary">See the proof</a>
+        <a href="mailto:fazley111@gmail.com" class="btn btn-outline">Let's talk</a>
+        <a href="https://fazleyrabbi.xyz/" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Main Portfolio</a>
+      </div>
+
+      <div class="hero-availability">
+        <p class="mono">[AVAILABLE] OPEN TO REMOTE OPPORTUNITIES</p>
+        <p class="mono">[LOCATION] OPEN TO GLOBAL TEAMS</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 120px; /* Accounts for potential sticky header */
+  }
+
+  .hero-content {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .badge-tag {
+    padding: 0.2rem 0.6rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px dashed var(--color-accent);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .hero-tagline {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .hero-title {
+    margin: 0;
+  }
+
+  .title-sub {
+    font-size: 1rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .meta-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .meta-list li {
+    display: flex;
+    align-items: center;
+  }
+
+  .meta-list li:not(:last-child)::after {
+    content: "·";
+    margin-left: 1.5rem;
+    color: var(--color-border);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .hero-availability {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+  
+  .hero-availability p {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .meta-list li:not(:last-child)::after {
+      content: none;
+    }
+    .meta-list {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .hero-actions {
+      flex-direction: column;
+    }
+  }
+</style>

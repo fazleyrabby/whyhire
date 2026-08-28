@@ -1,0 +1,169 @@
+---
+import { tinkeringProjects } from '../data/tinkering';
+---
+
+<section id="tinkering-lab" class="section">
+  <div class="container">
+    <h2 class="section-title">
+      <span class="text-accent">02 //</span> THINGS I BUILD WHEN NOBODY ASKED ME TO.
+    </h2>
+    <p class="section-subtitle">
+      Professional work shows what I can deliver. These projects show how I think when I'm curious.
+    </p>
+
+    <div class="lab-grid">
+      {tinkeringProjects.map((project, index) => (
+        <a href={project.link} target="_blank" rel="noopener noreferrer" class="lab-item glass-panel" style={`--index: ${index}`}>
+          <div class="item-overlay"></div>
+          
+          <div class="item-header">
+            <span class="type-badge mono text-accent">[{project.type}]</span>
+          </div>
+          
+          <h3 class="item-title">{project.title}</h3>
+          <p class="item-desc">{project.description}</p>
+          
+          <div class="item-footer mono">
+            <span class="tech-stack">
+              {project.tech.map(t => <span>{t}</span>)}
+            </span>
+            <span class="launch-icon text-accent">EXECUTE →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-title {
+    margin-bottom: 1rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  
+  .section-subtitle {
+    max-width: 600px;
+    color: var(--color-text-muted);
+    margin-bottom: 4rem;
+    font-size: 1.125rem;
+  }
+
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .lab-item {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--glass-panel-bg);
+    border: 1px solid var(--color-border);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+    animation: fadeUp 0.6s ease forwards;
+    animation-delay: calc(var(--index) * 0.1s);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scanline effect */
+  .item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      rgba(16, 185, 129, 0.05) 51%
+    );
+    background-size: 100% 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .lab-item:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.15);
+  }
+
+  .lab-item:hover .item-overlay {
+    opacity: 1;
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .type-badge {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .item-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+    color: var(--color-text);
+  }
+
+  .item-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+  }
+
+  .tech-stack {
+    display: flex;
+    gap: 0.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .tech-stack span::before {
+    content: "#";
+    color: var(--color-border);
+  }
+
+  .launch-icon {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+  }
+
+  .lab-item:hover .launch-icon {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>

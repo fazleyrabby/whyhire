@@ -1,0 +1,179 @@
+---
+import { homelabData } from '../data/homelab';
+---
+
+<section id="homelab" class="section">
+  <div class="container">
+    <h2 class="section-title">
+      <span class="text-accent">01 //</span> I DON'T JUST DEPLOY TO SOMEONE ELSE'S CLOUD.
+    </h2>
+    <p class="section-subtitle">
+      I maintain my own infrastructure. That means dealing with networking, service isolation, backups, and fixing things when infrastructure decides to have a bad day.
+    </p>
+
+    <div class="homelab-dashboard glass-panel">
+      <div class="dashboard-header mono">
+        <div class="sys-info">
+          <span>HOST: Ubuntu</span>
+          <span>RAM: {homelabData.memoryUsed}</span>
+          <span>NET: Tailscale / Cloudflared</span>
+        </div>
+        <div class="sys-status text-accent">
+          [{homelabData.totalContainers} CONTAINERS ACTIVE]
+        </div>
+      </div>
+
+      <div class="server-rack">
+        {homelabData.services.map((service, index) => (
+          <div class="server-node" style={`--delay: ${index * 0.1}s`}>
+            <div class="node-info">
+              <h4 class="node-name">{service.name}</h4>
+              <p class="node-metrics mono">
+                <span>{service.instances} INSTANCE(S)</span>
+                <span class="text-accent">{service.memory}</span>
+              </p>
+              <div class="node-details">
+                <p>{service.notes}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-title {
+    margin-bottom: 1rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  
+  .section-subtitle {
+    max-width: 600px;
+    color: var(--color-text-muted);
+    margin-bottom: 4rem;
+    font-size: 1.125rem;
+  }
+
+  .homelab-dashboard {
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Cyber/Terminal Grid Background */
+  .homelab-dashboard::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  .sys-info {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .sys-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .server-rack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .server-node {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    background: var(--glass-dark-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    animation: slideIn 0.5s ease forwards;
+    animation-delay: var(--delay);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .server-node:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  
+  .node-name {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.25rem;
+  }
+
+  .node-metrics {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .node-info {
+    flex: 1;
+  }
+
+  .node-details {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    margin-top: 0;
+  }
+
+  .server-node:hover .node-details {
+    max-height: 100px;
+    opacity: 1;
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .sys-info {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .server-node:hover {
+      transform: none;
+    }
+    .node-details {
+      max-height: 100px; /* Always show on mobile */
+      opacity: 1;
+      margin-top: 0.75rem;
+    }
+  }
+</style>
