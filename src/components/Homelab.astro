@@ -1,41 +1,86 @@
 ---
+// src/components/Homelab.astro
 import { homelabData } from '../data/homelab';
+
+const infrastructureHighlights = [
+  {
+    role: "HIGH-PERFORMANCE DATABASES",
+    tech: "MySQL 8.0 & Redis 7",
+    instances: "5 DB Instances Consolidated",
+    memory: "386 MB",
+    benefit: "Tuned InnoDB buffer pools, query indexes, and sub-millisecond in-memory caching for extreme load resilience."
+  },
+  {
+    role: "AUTOMATED CI/CD BUILD ENGINE",
+    tech: "Ephemeral Docker Runners",
+    instances: "On-Demand Workers",
+    memory: "35 MB",
+    benefit: "Spawns ephemeral isolated containers via GitHub webhooks to test and deploy code in seconds without cloud CI bills."
+  },
+  {
+    role: "ZERO-TRUST SECURITY & REVERSE PROXY",
+    tech: "Traefik v3 & Tailscale Mesh",
+    instances: "Encrypted WireGuard",
+    memory: "Auto SSL",
+    benefit: "Zero exposed public ports. All microservices communicate across private encrypted channels with automated certificates."
+  },
+  {
+    role: "REAL-TIME OBSERVABILITY & METRICS",
+    tech: "Grafana 11.5 & Prometheus",
+    instances: "Full Telemetry Stack",
+    memory: "250 MB",
+    benefit: "Continuous tracking of container health, latency, and memory spikes to diagnose bottlenecks before users notice."
+  },
+  {
+    role: "ASYNC QUEUES & SELF-HOSTED AI",
+    tech: "Oblok Engine & Local LLMs",
+    instances: "5 Worker Nodes",
+    memory: "427 MB",
+    benefit: "Handles heavy background tasks, scheduled jobs, and private AI completions without vendor lock-in or rate limits."
+  }
+];
 ---
 
 <section id="homelab" class="section">
   <div class="container">
-    <h2 class="section-title">
-      <span class="text-accent">01 //</span> I DON'T JUST DEPLOY TO SOMEONE ELSE'S CLOUD.
-    </h2>
+    <div class="section-badge mono text-accent">[04 // FULL-STACK OWNERSHIP]</div>
+    <h2 class="section-title">SERVER ARCHITECTURE & DEVOPS</h2>
     <p class="section-subtitle">
-      I maintain my own infrastructure. That means dealing with networking, service isolation, backups, and fixing things when infrastructure decides to have a bad day.
+      I don't just write application code—I configure and manage the Linux servers, databases, and networks that keep systems fast, secure, and resilient.
     </p>
 
     <div class="homelab-dashboard glass-panel">
-      <div class="dashboard-header mono">
-        <div class="sys-info">
-          <span>HOST: Ubuntu</span>
-          <span>RAM: {homelabData.memoryUsed}</span>
-          <span>NET: Tailscale / Cloudflared</span>
+      {/* High-Level Executive Telemetry */}
+      <div class="telemetry-grid">
+        <div class="telemetry-box">
+          <div class="telemetry-num text-accent mono">{homelabData.totalContainers} ACTIVE</div>
+          <div class="telemetry-desc mono">PRODUCTION DOCKER CONTAINERS</div>
         </div>
-        <div class="sys-status text-accent">
-          [{homelabData.totalContainers} CONTAINERS ACTIVE]
+        <div class="telemetry-box">
+          <div class="telemetry-num text-accent mono">99.98%</div>
+          <div class="telemetry-desc mono">SYSTEM UPTIME (UBUNTU HOST)</div>
+        </div>
+        <div class="telemetry-box">
+          <div class="telemetry-num text-accent mono">ZERO PORTS</div>
+          <div class="telemetry-desc mono">PUBLICLY EXPOSED (ENCRYPTED MESH)</div>
         </div>
       </div>
 
+      {/* Clear, Plain-English Infrastructure Capabilities */}
       <div class="server-rack">
-        {homelabData.services.map((service, index) => (
-          <div class="server-node" style={`--delay: ${index * 0.1}s`}>
-            <div class="node-info">
-              <h4 class="node-name">{service.name}</h4>
-              <p class="node-metrics mono">
-                <span>{service.instances} INSTANCE(S)</span>
-                <span class="text-accent">{service.memory}</span>
-              </p>
-              <div class="node-details">
-                <p>{service.notes}</p>
+        {infrastructureHighlights.map((item, index) => (
+          <div class="server-blade" style={`--delay: ${index * 0.08}s`}>
+            <div class="blade-header">
+              <div class="blade-titles">
+                <span class="blade-role mono text-accent">{item.role}</span>
+                <h3 class="blade-tech">{item.tech}</h3>
+              </div>
+              <div class="blade-meta mono">
+                <span class="badge-instances">{item.instances}</span>
+                <span class="badge-memory text-accent">{item.memory}</span>
               </div>
             </div>
+            <p class="blade-benefit">{item.benefit}</p>
           </div>
         ))}
       </div>
@@ -44,136 +89,126 @@ import { homelabData } from '../data/homelab';
 </section>
 
 <style>
+  .section-badge {
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
   .section-title {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     font-size: clamp(2rem, 4vw, 3rem);
   }
   
   .section-subtitle {
-    max-width: 600px;
+    max-width: 750px;
     color: var(--color-text-muted);
-    margin-bottom: 4rem;
-    font-size: 1.125rem;
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
   }
 
   .homelab-dashboard {
-    padding: 2rem;
+    padding: 2.5rem;
     border: 1px solid var(--color-border);
     position: relative;
     overflow: hidden;
   }
 
-  /* Cyber/Terminal Grid Background */
-  .homelab-dashboard::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
-    background-size: 30px 30px;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1.5rem;
+  .telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    padding-bottom: 2rem;
     border-bottom: 1px solid var(--color-border);
     margin-bottom: 2rem;
-    position: relative;
-    z-index: 1;
-    font-size: 0.875rem;
-    color: var(--color-accent);
   }
 
-  .sys-info {
-    display: flex;
-    gap: 2rem;
+  .telemetry-box {
+    padding: 1.25rem;
+    background: var(--glass-dark-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
   }
 
-  .sys-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .telemetry-num {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+
+  .telemetry-desc {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
   }
 
   .server-rack {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    position: relative;
-    z-index: 1;
   }
 
-  .server-node {
-    display: flex;
-    align-items: center;
-    padding: 1.25rem 2rem;
+  .server-blade {
+    padding: 1.5rem 1.75rem;
     background: var(--glass-dark-bg);
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    animation: slideIn 0.5s ease forwards;
-    animation-delay: var(--delay);
-    opacity: 0;
-    transform: translateY(10px);
+    transition: all 0.25s ease;
   }
 
-  @keyframes slideIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .server-node:hover {
+  .server-blade:hover {
     background: rgba(255, 255, 255, 0.04);
-  }
-  
-  .node-name {
-    margin: 0 0 0.25rem 0;
-    font-size: 1.25rem;
+    border-color: rgba(255, 255, 255, 0.15);
   }
 
-  .node-metrics {
+  .blade-header {
     display: flex;
-    gap: 1.5rem;
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
   }
 
-  .node-info {
-    flex: 1;
+  .blade-role {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.25rem;
   }
 
-  .node-details {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  .blade-tech {
+    font-size: 1.25rem;
+    margin: 0;
     color: var(--color-text);
-    font-size: 0.9rem;
-    margin-top: 0;
   }
 
-  .server-node:hover .node-details {
-    max-height: 100px;
-    opacity: 1;
-    margin-top: 0.75rem;
+  .blade-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .blade-benefit {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 
   @media (max-width: 768px) {
-    .sys-info {
+    .homelab-dashboard {
+      padding: 1.25rem;
+    }
+    .blade-header {
       flex-direction: column;
       gap: 0.5rem;
     }
-    .server-node:hover {
-      transform: none;
-    }
-    .node-details {
-      max-height: 100px; /* Always show on mobile */
-      opacity: 1;
-      margin-top: 0.75rem;
+    .blade-meta {
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
   }
 </style>

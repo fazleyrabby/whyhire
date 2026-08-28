@@ -3,54 +3,46 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
-// 1. Vibrant Spiral Galaxy Dust Field positioned to balance the Hero
-const GalaxyDust = ({ count = 2200, radius = 18 }) => {
+// 1. Soft, delicate galaxy dust field
+const GalaxyDust = ({ count = 1500, radius = 20 }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
-  const { positions, colors, sizes } = useMemo(() => {
+  const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
-    const sz = new Float32Array(count);
 
-    const colorCore = new THREE.Color('#34d399'); // Radiant Emerald
-    const colorMid = new THREE.Color('#38bdf8'); // Sky Cyan
-    const colorOuter = new THREE.Color('#818cf8'); // Indigo/Purple
-    const colorDust = new THREE.Color('#f8fafc'); // White
+    const colorCore = new THREE.Color('#10b981'); // Emerald
+    const colorMid = new THREE.Color('#38bdf8'); // Soft Sky Cyan
+    const colorDust = new THREE.Color('#64748b'); // Muted Slate
 
     for (let i = 0; i < count; i++) {
-      // 3-arm spiral galaxy distribution
-      const r = Math.pow(Math.random(), 1.5) * radius;
-      const spinAngle = r * 0.45;
+      const r = Math.pow(Math.random(), 1.6) * radius;
+      const spinAngle = r * 0.4;
       const branchAngle = ((i % 3) * (2 * Math.PI)) / 3;
 
-      const randomX = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.4 * radius);
-      const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.25 * radius);
-      const randomZ = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.4 * radius);
+      const randomX = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.35 * radius);
+      const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.2 * radius);
+      const randomZ = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.35 * radius);
 
-      // Offset slightly to the right to fill empty space on Hero
-      pos[i * 3] = Math.cos(branchAngle + spinAngle) * r + randomX + 2.5;
+      // Balanced position across the background
+      pos[i * 3] = Math.cos(branchAngle + spinAngle) * r + randomX + 2;
       pos[i * 3 + 1] = randomY;
-      pos[i * 3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ - 2;
+      pos[i * 3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ - 3;
 
-      // Color interpolation
-      const mixedColor = r < radius * 0.35 
-        ? colorCore.clone().lerp(colorMid, r / (radius * 0.35))
-        : colorMid.clone().lerp(r < radius * 0.7 ? colorOuter : colorDust, (r - radius * 0.35) / (radius * 0.65));
+      const mixedColor = r < radius * 0.4 
+        ? colorCore.clone().lerp(colorMid, r / (radius * 0.4))
+        : colorMid.clone().lerp(colorDust, (r - radius * 0.4) / (radius * 0.6));
 
       col[i * 3] = mixedColor.r;
       col[i * 3 + 1] = mixedColor.g;
       col[i * 3 + 2] = mixedColor.b;
-
-      // Varied star sizes
-      sz[i] = (0.04 + Math.random() * 0.08);
     }
-    return { positions: pos, colors: col, sizes: sz };
+    return { positions: pos, colors: col };
   }, [count, radius]);
 
   useFrame((state) => {
     if (!pointsRef.current) return;
-    pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.03;
-    pointsRef.current.rotation.z = state.clock.getElapsedTime() * 0.01;
+    pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.015; // Slow, calm rotation
   });
 
   return (
@@ -70,10 +62,10 @@ const GalaxyDust = ({ count = 2200, radius = 18 }) => {
         />
       </bufferGeometry>
       <pointsMaterial 
-        size={0.085} 
+        size={0.04} 
         vertexColors 
         transparent 
-        opacity={0.75} 
+        opacity={0.4} 
         blending={THREE.AdditiveBlending}
         sizeAttenuation
       />
@@ -81,7 +73,7 @@ const GalaxyDust = ({ count = 2200, radius = 18 }) => {
   );
 };
 
-// 2. Shooting Star System (Frequent, glowing streaks)
+// 2. Soft, occasional shooting star
 const ShootingStar = ({ delay = 0 }) => {
   const lineRef = useRef<THREE.LineSegments>(null);
   const [active, setActive] = useState(false);
@@ -90,17 +82,16 @@ const ShootingStar = ({ delay = 0 }) => {
   const progress = useRef(0);
 
   const triggerStar = () => {
-    // Spawn across the upper right sky
     startPos.current.set(
-      (Math.random() * 20) - 5,
-      5 + Math.random() * 7,
-      -5 - Math.random() * 10
+      (Math.random() * 24) - 6,
+      6 + Math.random() * 6,
+      -8 - Math.random() * 8
     );
     velocity.current.set(
-      -12 - Math.random() * 8,
-      -7 - Math.random() * 5,
-      2 + Math.random() * 4
-    ).normalize().multiplyScalar(0.45);
+      -12 - Math.random() * 6,
+      -6 - Math.random() * 4,
+      Math.random() * 3
+    ).normalize().multiplyScalar(0.35);
 
     progress.current = 0;
     setActive(true);
@@ -111,7 +102,7 @@ const ShootingStar = ({ delay = 0 }) => {
       triggerStar();
       const interval = setInterval(() => {
         triggerStar();
-      }, 3000 + Math.random() * 3500);
+      }, 4500 + Math.random() * 4000);
       return () => clearInterval(interval);
     }, delay);
 
@@ -122,9 +113,9 @@ const ShootingStar = ({ delay = 0 }) => {
     if (!active || !lineRef.current) return;
 
     progress.current += 1;
-    const trailLength = 2.5;
+    const trailLength = 2.0;
 
-    const currentHead = startPos.current.clone().add(velocity.current.clone().multiplyScalar(progress.current * 1.6));
+    const currentHead = startPos.current.clone().add(velocity.current.clone().multiplyScalar(progress.current * 1.3));
     const currentTail = currentHead.clone().sub(velocity.current.clone().multiplyScalar(trailLength));
 
     const positions = new Float32Array([
@@ -134,7 +125,7 @@ const ShootingStar = ({ delay = 0 }) => {
 
     lineRef.current.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-    if (progress.current > 35) {
+    if (progress.current > 30) {
       setActive(false);
     }
   });
@@ -144,17 +135,17 @@ const ShootingStar = ({ delay = 0 }) => {
   return (
     <lineSegments ref={lineRef}>
       <bufferGeometry />
-      <lineBasicMaterial color="#6ee7b7" transparent opacity={0.8} linewidth={2} />
+      <lineBasicMaterial color="#a7f3d0" transparent opacity={0.4} linewidth={1.5} />
     </lineSegments>
   );
 };
 
-// 3. Smooth Camera Rig following mouse
+// 3. Gentle Camera Rig following cursor
 const CameraRig = () => {
   useFrame((state) => {
-    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 1.2, 0.03);
-    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.6, 0.03);
-    state.camera.lookAt(1, 0, 0);
+    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 0.8, 0.02);
+    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.4, 0.02);
+    state.camera.lookAt(0.5, 0, 0);
   });
   return null;
 };
@@ -162,20 +153,22 @@ const CameraRig = () => {
 const Scene = () => {
   return (
     <>
-      <ambientLight intensity={0.1} />
+      <ambientLight intensity={0.05} />
       
       {/* Background Starfield */}
-      <Stars radius={30} depth={25} count={2400} factor={3.5} saturation={0.5} fade speed={0.4} />
+      <Stars radius={40} depth={30} count={1600} factor={2.2} saturation={0} fade speed={0.2} />
       
-      {/* Luminous Rotating Spiral Galaxy (Offset to right) */}
-      <GalaxyDust count={2400} radius={18} />
+      {/* Soft Galaxy Dust */}
+      <GalaxyDust count={1500} radius={18} />
       
-      {/* Multiple Shooting Stars */}
-      <ShootingStar delay={500} />
-      <ShootingStar delay={2500} />
+      {/* Occasional Subtle Shooting Star */}
+      <ShootingStar delay={800} />
       
       {/* Cursor Parallax */}
       <CameraRig />
+      
+      {/* Soft Fog for smooth edge blending */}
+      <fog attach="fog" args={['#030712', 12, 38]} />
     </>
   );
 };
@@ -183,9 +176,9 @@ const Scene = () => {
 export default function EngineeringCore() {
   return (
     <Canvas 
-      camera={{ position: [0, 0, 10], fov: 45 }}
-      gl={{ antialias: true, alpha: true }}
-      dpr={[1, 2]}
+      camera={{ position: [0, 0, 9], fov: 45 }}
+      gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
+      dpr={[1, 1.5]}
     >
       <Scene />
     </Canvas>
