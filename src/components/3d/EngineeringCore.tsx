@@ -1,47 +1,56 @@
-import React, { useRef, useMemo, useState } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
-// 1. Subtle Galaxy Spiral / Dust Field
-const GalaxyDust = ({ count = 600, radius = 25 }) => {
+// 1. Vibrant Spiral Galaxy Dust Field positioned to balance the Hero
+const GalaxyDust = ({ count = 2200, radius = 18 }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
-  const { positions, colors } = useMemo(() => {
+  const { positions, colors, sizes } = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
+    const sz = new Float32Array(count);
 
-    const colorInside = new THREE.Color('#10b981'); // Emerald
-    const colorOutside = new THREE.Color('#06b6d4'); // Soft Cyan
-    const colorDust = new THREE.Color('#94a3b8'); // Muted Slate
+    const colorCore = new THREE.Color('#34d399'); // Radiant Emerald
+    const colorMid = new THREE.Color('#38bdf8'); // Sky Cyan
+    const colorOuter = new THREE.Color('#818cf8'); // Indigo/Purple
+    const colorDust = new THREE.Color('#f8fafc'); // White
 
     for (let i = 0; i < count; i++) {
-      // Spiral galaxy branch distribution
-      const r = Math.random() * radius;
-      const spinAngle = r * 0.4;
+      // 3-arm spiral galaxy distribution
+      const r = Math.pow(Math.random(), 1.5) * radius;
+      const spinAngle = r * 0.45;
       const branchAngle = ((i % 3) * (2 * Math.PI)) / 3;
 
-      const randomX = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.3 * radius);
-      const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.2 * radius);
-      const randomZ = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.3 * radius);
+      const randomX = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.4 * radius);
+      const randomY = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.25 * radius);
+      const randomZ = (Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 0.4 * radius);
 
-      pos[i * 3] = Math.cos(branchAngle + spinAngle) * r + randomX;
-      pos[i * 3 + 1] = randomY - 2;
-      pos[i * 3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
+      // Offset slightly to the right to fill empty space on Hero
+      pos[i * 3] = Math.cos(branchAngle + spinAngle) * r + randomX + 2.5;
+      pos[i * 3 + 1] = randomY;
+      pos[i * 3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ - 2;
 
-      // Color interpolation from core to arms
-      const mixedColor = colorInside.clone().lerp(r > radius * 0.5 ? colorOutside : colorDust, r / radius);
+      // Color interpolation
+      const mixedColor = r < radius * 0.35 
+        ? colorCore.clone().lerp(colorMid, r / (radius * 0.35))
+        : colorMid.clone().lerp(r < radius * 0.7 ? colorOuter : colorDust, (r - radius * 0.35) / (radius * 0.65));
+
       col[i * 3] = mixedColor.r;
       col[i * 3 + 1] = mixedColor.g;
       col[i * 3 + 2] = mixedColor.b;
+
+      // Varied star sizes
+      sz[i] = (0.04 + Math.random() * 0.08);
     }
-    return { positions: pos, colors: col };
+    return { positions: pos, colors: col, sizes: sz };
   }, [count, radius]);
 
   useFrame((state) => {
     if (!pointsRef.current) return;
-    // Extremely slow, majestic galaxy rotation
-    pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.02;
+    pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.03;
+    pointsRef.current.rotation.z = state.clock.getElapsedTime() * 0.01;
   });
 
   return (
@@ -61,10 +70,10 @@ const GalaxyDust = ({ count = 600, radius = 25 }) => {
         />
       </bufferGeometry>
       <pointsMaterial 
-        size={0.055} 
+        size={0.085} 
         vertexColors 
         transparent 
-        opacity={0.35} 
+        opacity={0.75} 
         blending={THREE.AdditiveBlending}
         sizeAttenuation
       />
@@ -72,47 +81,50 @@ const GalaxyDust = ({ count = 600, radius = 25 }) => {
   );
 };
 
-// 2. Occasional Subtle Shooting Star
-const ShootingStar = () => {
+// 2. Shooting Star System (Frequent, glowing streaks)
+const ShootingStar = ({ delay = 0 }) => {
   const lineRef = useRef<THREE.LineSegments>(null);
   const [active, setActive] = useState(false);
   const startPos = useRef(new THREE.Vector3());
   const velocity = useRef(new THREE.Vector3());
   const progress = useRef(0);
 
-  const resetStar = () => {
-    // Spawn in random upper sky area
+  const triggerStar = () => {
+    // Spawn across the upper right sky
     startPos.current.set(
-      (Math.random() - 0.5) * 30,
-      8 + Math.random() * 8,
-      -10 - Math.random() * 15
+      (Math.random() * 20) - 5,
+      5 + Math.random() * 7,
+      -5 - Math.random() * 10
     );
-    // Angle downwards diagonally
     velocity.current.set(
-      -15 - Math.random() * 10,
-      -8 - Math.random() * 6,
-      Math.random() * 5
-    ).normalize().multiplyScalar(0.35); // Smooth streak speed
+      -12 - Math.random() * 8,
+      -7 - Math.random() * 5,
+      2 + Math.random() * 4
+    ).normalize().multiplyScalar(0.45);
 
     progress.current = 0;
     setActive(true);
   };
 
   useEffect(() => {
-    // Trigger periodically every 3 to 6 seconds
-    const interval = setInterval(() => {
-      if (!active) resetStar();
-    }, 3500 + Math.random() * 3000);
-    return () => clearInterval(interval);
-  }, [active]);
+    const timeout = setTimeout(() => {
+      triggerStar();
+      const interval = setInterval(() => {
+        triggerStar();
+      }, 3000 + Math.random() * 3500);
+      return () => clearInterval(interval);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [delay]);
 
   useFrame(() => {
     if (!active || !lineRef.current) return;
 
     progress.current += 1;
-    const trailLength = 1.8;
+    const trailLength = 2.5;
 
-    const currentHead = startPos.current.clone().add(velocity.current.clone().multiplyScalar(progress.current * 1.5));
+    const currentHead = startPos.current.clone().add(velocity.current.clone().multiplyScalar(progress.current * 1.6));
     const currentTail = currentHead.clone().sub(velocity.current.clone().multiplyScalar(trailLength));
 
     const positions = new Float32Array([
@@ -122,8 +134,7 @@ const ShootingStar = () => {
 
     lineRef.current.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-    // Despawn after traveling
-    if (progress.current > 40) {
+    if (progress.current > 35) {
       setActive(false);
     }
   });
@@ -133,17 +144,17 @@ const ShootingStar = () => {
   return (
     <lineSegments ref={lineRef}>
       <bufferGeometry />
-      <lineBasicMaterial color="#a7f3d0" transparent opacity={0.5} linewidth={2} />
+      <lineBasicMaterial color="#6ee7b7" transparent opacity={0.8} linewidth={2} />
     </lineSegments>
   );
 };
 
-// 3. Gentle Camera Rig following cursor
+// 3. Smooth Camera Rig following mouse
 const CameraRig = () => {
   useFrame((state) => {
-    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 0.8, 0.025);
-    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.4, 0.025);
-    state.camera.lookAt(0, 0, 0);
+    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 1.2, 0.03);
+    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.6, 0.03);
+    state.camera.lookAt(1, 0, 0);
   });
   return null;
 };
@@ -151,22 +162,20 @@ const CameraRig = () => {
 const Scene = () => {
   return (
     <>
-      <ambientLight intensity={0.05} />
+      <ambientLight intensity={0.1} />
       
       {/* Background Starfield */}
-      <Stars radius={50} depth={40} count={1800} factor={2.5} saturation={0} fade speed={0.15} />
+      <Stars radius={30} depth={25} count={2400} factor={3.5} saturation={0.5} fade speed={0.4} />
       
-      {/* Subtle Rotating Galaxy Spiral */}
-      <GalaxyDust count={750} radius={22} />
+      {/* Luminous Rotating Spiral Galaxy (Offset to right) */}
+      <GalaxyDust count={2400} radius={18} />
       
-      {/* Occasional Subtle Shooting Star */}
-      <ShootingStar />
+      {/* Multiple Shooting Stars */}
+      <ShootingStar delay={500} />
+      <ShootingStar delay={2500} />
       
-      {/* Mouse Parallax Rig */}
+      {/* Cursor Parallax */}
       <CameraRig />
-      
-      {/* Dark Ambient Fog to preserve high text contrast */}
-      <fog attach="fog" args={['#030712', 8, 28]} />
     </>
   );
 };
@@ -175,8 +184,8 @@ export default function EngineeringCore() {
   return (
     <Canvas 
       camera={{ position: [0, 0, 10], fov: 45 }}
-      gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
-      dpr={[1, 1.5]}
+      gl={{ antialias: true, alpha: true }}
+      dpr={[1, 2]}
     >
       <Scene />
     </Canvas>
