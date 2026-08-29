@@ -1,6 +1,7 @@
 ---
 // src/components/Homelab.astro
 import { homelabData } from '../data/homelab';
+import HomelabDiagram from './HomelabDiagram';
 
 const infrastructureHighlights = [
   {
@@ -52,15 +53,7 @@ const infrastructureHighlights = [
     <div class="homelab-dashboard glass-panel">
       {/* Visual Infrastructure Topology Diagram */}
       <div class="topology-banner">
-        <img 
-          src="/images/homelab.png" 
-          alt="Homelab Infrastructure Architecture Topology: Cloudflare Tunnels, Tailscale Mesh, Docker, and AI Agent Telegram Interface" 
-          class="topology-img"
-          loading="lazy"
-        />
-        <div class="topology-overlay">
-          <span class="mono text-accent">[SYSTEM TOPOLOGY // CLOUDFLARE + TAILSCALE + FRANKENPHP + HERMES AI]</span>
-        </div>
+        <HomelabDiagram client:visible />
       </div>
 
       {/* High-Level Executive Telemetry */}
@@ -151,33 +144,6 @@ const infrastructureHighlights = [
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 2rem;
-    border: 1px solid var(--color-border);
-    background: #000;
-  }
-
-  .topology-img {
-    width: 100%;
-    height: auto;
-    max-height: 460px;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-
-  .topology-banner:hover .topology-img {
-    transform: scale(1.015);
-  }
-
-  .topology-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.75rem 1.25rem;
-    background: linear-gradient(to top, rgba(3, 7, 18, 0.9) 0%, transparent 100%);
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
   }
 
   .telemetry-grid {

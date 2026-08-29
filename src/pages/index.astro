@@ -5,7 +5,7 @@ import ExecutiveSummary from '../components/ExecutiveSummary.astro';
 import EngineeringCore from '../components/3d/EngineeringCore';
 import CaseStudiesConsole from '../components/CaseStudiesConsole';
 import IncidentSimulator from '../components/IncidentSimulator';
-import RecruiterChat from '../components/RecruiterChat';
+import AIPhilosophy from '../components/AIPhilosophy';
 import Homelab from '../components/Homelab.astro';
 import TinkeringLab from '../components/TinkeringLab.astro';
 import Contact from '../components/Contact.astro';
@@ -20,6 +20,9 @@ import FloatingStickers from '../components/FloatingStickers';
   </div>
 
   <Hero />
+
+  <AIPhilosophy client:visible />
+
   <ExecutiveSummary />
   
   <section id="proof" class="section">
@@ -31,7 +34,6 @@ import FloatingStickers from '../components/FloatingStickers';
   </section>
 
   <IncidentSimulator client:visible />
-  <RecruiterChat client:visible />
 
   <Homelab />
   <TinkeringLab />

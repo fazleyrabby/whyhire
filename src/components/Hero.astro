@@ -1,5 +1,6 @@
 ---
 // src/components/Hero.astro
+import HeroChat from './HeroChat';
 ---
 
 <section class="section hero" aria-label="Introduction">
@@ -12,8 +13,7 @@
 
       <h1 class="hero-title">
         <span class="title-sub">WHY HIRE ME?</span>
-        I build systems <br />
-        that survive production.
+        I build systems that survive production.
       </h1>
 
       <p class="hero-tagline mono text-muted">
@@ -45,6 +45,10 @@
         <p class="mono">[LOCATION] OPEN TO GLOBAL TEAMS</p>
       </div>
     </div>
+    
+    <div class="hero-terminal-container">
+      <HeroChat client:load />
+    </div>
   </div>
 </section>
 
@@ -55,12 +59,25 @@
     align-items: center;
     padding-top: 120px; /* Accounts for potential sticky header */
   }
+  .hero .container {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Constrain max width so they don't drift too far apart on ultrawides */
+  }
 
   .hero-content {
-    max-width: 800px;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+  }
+
+  .hero-terminal-container {
+    width: 100%;
+    max-width: 550px;
+    margin: 0 auto; /* Center it within its column */
   }
 
   .status-indicator {
@@ -87,6 +104,8 @@
 
   .hero-title {
     margin: 0;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    text-wrap: balance;
   }
 
   .title-sub {
@@ -143,6 +162,17 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+
+  @media (max-width: 992px) {
+    .hero .container {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+    
+    .hero-terminal-container {
+      margin: 0 auto;
+    }
   }
 
   @media (max-width: 768px) {
