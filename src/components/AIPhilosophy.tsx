@@ -29,6 +29,40 @@ export default function AIPhilosophy() {
             <p>Strict human code verification on concurrency, database locks, idempotency, and security.</p>
           </div>
         </div>
+
+        {/* AI vs Human Comparison */}
+        <div className="ai-vs-human-container mono">
+          <div className="ai-side glass-panel">
+            <div className="side-header text-muted">WHAT AI CAN DO</div>
+            <ul className="comparison-list">
+              <li><span className="bullet text-muted">→</span> Generate 2,000 lines of boilerplate in 10 seconds.</li>
+              <li><span className="bullet text-muted">→</span> Write complex regex without checking StackOverflow.</li>
+              <li><span className="bullet text-muted">→</span> Parse obscure documentation and APIs instantly.</li>
+              <li><span className="bullet text-muted">→</span> Scaffold UI components at lightspeed.</li>
+            </ul>
+          </div>
+          
+          <div className="vs-badge text-accent">VS</div>
+
+          <div className="human-side glass-panel">
+            <div className="side-header text-accent">WHAT HUMANS DO BETTER</div>
+            <ul className="comparison-list">
+              <li><span className="bullet text-accent">→</span> Take the blame when production crashes at 3 AM.</li>
+              <li><span className="bullet text-accent">→</span> Absorb your frustration. You can't curse at an AI for a broken production or lost sale—it won't understand. A human does.</li>
+              <li><span className="bullet text-accent">→</span> Push back on bad product requirements.</li>
+              <li><span className="bullet text-accent">→</span> Understand actual business logic and user pain.</li>
+              <li><span className="bullet text-accent">→</span> Give a damn about the company's survival.</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* The Human Element Quote */}
+        <div className="ai-quote-container glass-panel mono">
+          <div className="quote-icon text-accent">"</div>
+          <p className="quote-text">
+            AI can do it all, but when the server is down or a sale drops, AI cannot give you sympathy. It has zero emotion... as fun as it is to tinker with.
+          </p>
+        </div>
       </div>
 
       <style>{`
@@ -60,6 +94,104 @@ export default function AIPhilosophy() {
           color: var(--color-text-muted);
           line-height: 1.5;
           margin: 0;
+        }
+        
+        /* AI vs Human */
+        .ai-vs-human-container {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin: 3rem 0;
+          position: relative;
+        }
+        @media (min-width: 768px) {
+          .ai-vs-human-container {
+            flex-direction: row;
+            align-items: stretch;
+          }
+        }
+        .ai-side, .human-side {
+          flex: 1;
+          padding: 1.5rem;
+          background: rgba(11, 15, 25, 0.4);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
+        }
+        .human-side {
+          background: rgba(16, 185, 129, 0.03);
+          border-color: rgba(16, 185, 129, 0.2);
+        }
+        .side-header {
+          font-size: 0.9rem;
+          font-weight: bold;
+          letter-spacing: 0.1em;
+          margin-bottom: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          padding-bottom: 0.5rem;
+        }
+        .human-side .side-header {
+          border-bottom-color: rgba(16, 185, 129, 0.2);
+        }
+        .comparison-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        .comparison-list li {
+          font-size: 0.85rem;
+          color: var(--color-text-muted);
+          line-height: 1.4;
+          display: flex;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+        .human-side .comparison-list li {
+          color: #d1d5db;
+        }
+        .bullet {
+          font-weight: bold;
+        }
+        .vs-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 1rem;
+          letter-spacing: 0.1em;
+          padding: 0.5rem;
+        }
+        @media (min-width: 768px) {
+          .vs-badge {
+            width: 40px;
+            padding: 0;
+          }
+        }
+
+        .ai-quote-container {
+          margin-top: 1rem;
+          padding: 1.5rem 2rem;
+          background: rgba(11, 15, 25, 0.6);
+          border-radius: 8px;
+          display: flex;
+          gap: 1rem;
+          align-items: flex-start;
+          box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        .quote-icon {
+          font-size: 2.5rem;
+          line-height: 1;
+          font-family: serif;
+          opacity: 0.7;
+        }
+        .quote-text {
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: var(--color-text-muted);
+          margin: 0;
+          padding-top: 0.25rem;
         }
       `}</style>
     </section>

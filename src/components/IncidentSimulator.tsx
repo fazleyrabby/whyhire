@@ -153,12 +153,10 @@ export default function IncidentSimulator() {
         .step {
           padding: 0.5rem 1rem;
           background: rgba(16, 185, 129, 0.05);
-          border-left: 2px solid var(--color-accent);
           font-size: 0.9rem;
         }
         .step-arrow {
           background: transparent;
-          border-left: none;
           padding: 0;
           text-align: center;
           font-weight: bold;
