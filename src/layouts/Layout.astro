@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import AISummarizer from '../components/AISummarizer';
 
 interface Props {
   title: string;
@@ -42,6 +43,7 @@ const { title, description = "Md. Fazley Rabbi - PHP/Laravel Engineer. I build s
   <body>
     <!-- Engineering Core 3D Container -->
     <div id="webgl-container"></div>
+    <AISummarizer client:load />
     
     <main>
       <slot />
