@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-const SUMMARY_TEXT = "Fazley Rabbi is a Senior Backend Engineer specializing in Laravel, PHP, and high-performance systems. He has over 5 years of experience building scalable applications, handling payments and fraud detection, and optimizing data performance with ClickHouse and Redis. He focuses on solving real business problems and ensuring systems survive production. He runs a homelab with 54+ containers, has zero ports publicly exposed, and uses AI to accelerate his workflow while taking full responsibility for the output.";
+const SUMMARY_TEXT = "Fazley Rabbi is a Mid level backend engineer specializing in Laravel, PHP, and high-performance systems. He has over 5 years of experience building scalable applications, handling payments and fraud detection, and optimizing data performance with ClickHouse and Redis. He focuses on solving real business problems and ensuring systems survive production. He runs a homelab with 54+ containers, has zero ports publicly exposed, and uses AI to accelerate his workflow while taking full responsibility for the output.";
 
 export default function AISummarizer() {
-  const [isActive, setIsActive] = useState(false);
+  const [status, setStatus] = useState('idle'); // 'idle', 'destroying', 'summarizing', 'reconstructing'
   const [displayedText, setDisplayedText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (!isActive) {
+    if (status !== 'summarizing') {
       setDisplayedText("");
       setCurrentIndex(0);
       return;
@@ -18,60 +18,131 @@ export default function AISummarizer() {
       const timeout = setTimeout(() => {
         setDisplayedText(prev => prev + SUMMARY_TEXT[currentIndex]);
         setCurrentIndex(prev => prev + 1);
-      }, 30); // Typing speed
+      }, 25); // Typing speed
       
       return () => clearTimeout(timeout);
     }
-  }, [isActive, currentIndex]);
+  }, [status, currentIndex]);
 
-  const toggleSummary = () => {
-    setIsActive(!isActive);
-    if (!isActive) {
-      // Hide the main content
+  const handleToggle = () => {
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    if (status === 'idle') {
+      setStatus('destroying');
       document.body.style.overflow = 'hidden';
-      const main = document.querySelector('main');
-      if (main) main.style.display = 'none';
-    } else {
-      // Restore the main content
-      document.body.style.overflow = 'auto';
-      const main = document.querySelector('main');
-      if (main) main.style.display = 'block';
+      
+      main.classList.remove('site-reconstructed');
+      main.classList.add('site-destroyed');
+      
+      setTimeout(() => {
+        main.style.display = 'none';
+        setStatus('summarizing');
+      }, 1000); // Wait for CRT collapse animation
+    } else if (status === 'summarizing') {
+      setStatus('reconstructing');
+      main.style.display = 'block';
+      
+      requestAnimationFrame(() => {
+        main.classList.remove('site-destroyed');
+        main.classList.add('site-reconstructed');
+      });
+      
+      setTimeout(() => {
+        document.body.style.overflow = 'auto';
+        setStatus('idle');
+      }, 1000); // Wait for CRT expand animation
     }
   };
+
+  const getButtonText = () => {
+    switch (status) {
+      case 'destroying': return "SYSTEM OVERRIDE...";
+      case 'summarizing': return "Return to Full Site";
+      case 'reconstructing': return "REBUILDING SYSTEM...";
+      default: return "TL;DR? Summarize with AI";
+    }
+  };
+
+  const isTransitioning = status === 'destroying' || status === 'reconstructing';
+  const buttonColor = status === 'destroying' ? '#ef4444' : (status === 'reconstructing' ? '#3b82f6' : 'var(--color-accent)');
 
   return (
     <>
       <button 
-        onClick={toggleSummary}
-        className="fixed top-4 right-4 z-50 bg-black/80 text-accent border border-accent/30 px-4 py-2 rounded font-mono text-sm hover:bg-accent/10 transition-colors backdrop-blur-sm"
-        style={{ zIndex: 9999 }}
+        onClick={handleToggle}
+        disabled={isTransitioning}
+        className="mono btn btn-outline"
+        style={{
+          position: 'fixed',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 9999,
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          color: buttonColor,
+          borderColor: isTransitioning ? buttonColor : 'rgba(16, 185, 129, 0.3)',
+          padding: '0.5rem 1rem',
+          borderRadius: '4px',
+          fontSize: '0.875rem',
+          cursor: isTransitioning ? 'wait' : 'pointer',
+          backdropFilter: 'blur(4px)',
+          transition: 'all 0.3s ease',
+          boxShadow: isTransitioning ? `0 0 15px ${buttonColor}80` : 'none',
+        }}
       >
-        {isActive ? "Return to Full Site" : "TL;DR? Summarize with AI"}
+        {getButtonText()}
       </button>
 
-      {isActive && (
+      {status === 'summarizing' && (
         <div 
-          className="fixed inset-0 bg-black z-40 flex items-center justify-center p-8"
-          style={{ zIndex: 9998 }}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'var(--color-bg)',
+            zIndex: 9998,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem'
+          }}
         >
-          <div className="max-w-2xl w-full">
-            <div className="flex items-center gap-2 mb-4 text-accent">
-              <span className="animate-pulse">●</span> 
-              <span className="font-mono text-sm uppercase tracking-wider">AI Agent Synthesizing Profile</span>
+          <div style={{ maxWidth: '42rem', width: '100%' }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem', 
+              marginBottom: '1rem',
+              color: 'var(--color-accent)'
+            }}>
+              <span className="mono" style={{ animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}>●</span> 
+              <span className="mono" style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Agent Synthesizing Profile</span>
             </div>
             
-            <div className="bg-black/50 border border-white/10 rounded-lg p-6 font-mono text-lg leading-relaxed shadow-2xl">
-              <p className="text-gray-300 min-h-[150px]">
+            <div className="glass-panel" style={{ 
+              padding: '1.5rem', 
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}>
+              <p className="mono" style={{ color: '#d1d5db', minHeight: '150px', fontSize: '1.125rem', lineHeight: 1.7 }}>
                 {displayedText}
-                <span className="inline-block w-2 h-5 bg-accent ml-1 animate-pulse"></span>
+                <span 
+                  style={{ 
+                    display: 'inline-block', 
+                    width: '0.5rem', 
+                    height: '1.25rem', 
+                    backgroundColor: 'var(--color-accent)', 
+                    marginLeft: '0.25rem',
+                    verticalAlign: 'text-bottom',
+                    animation: 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                  }}>
+                </span>
               </p>
             </div>
             
             {currentIndex === SUMMARY_TEXT.length && (
-              <div className="mt-8 text-center animate-fade-in">
+              <div style={{ marginTop: '2rem', textAlign: 'center', animation: 'fadeInUp 0.5s ease-out forwards' }}>
                 <button 
-                  onClick={toggleSummary}
-                  className="bg-accent text-black px-6 py-3 font-mono font-bold hover:bg-white transition-colors"
+                  onClick={handleToggle}
+                  className="btn btn-primary"
                 >
                   ACCESS FULL PORTFOLIO
                 </button>
@@ -80,6 +151,41 @@ export default function AISummarizer() {
           </div>
         </div>
       )}
+      
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+
+        @keyframes crtCollapse {
+          0% { transform: scale(1, 1); opacity: 1; filter: brightness(1) contrast(1); }
+          20% { transform: scale(1.02, 0.9); filter: brightness(1.2) contrast(1.2); opacity: 1; }
+          40% { transform: scale(0.9, 0.01); filter: brightness(3) contrast(2); opacity: 0.9; }
+          70% { transform: scale(0.05, 0.01); filter: brightness(5) contrast(3); opacity: 0.5; }
+          100% { transform: scale(0, 0); opacity: 0; filter: brightness(0); }
+        }
+
+        @keyframes crtExpand {
+          0% { transform: scale(0, 0); opacity: 0; filter: brightness(0); }
+          30% { transform: scale(0.05, 0.01); filter: brightness(5) contrast(3); opacity: 0.5; }
+          60% { transform: scale(0.9, 0.01); filter: brightness(3) contrast(2); opacity: 0.9; }
+          80% { transform: scale(1.02, 0.9); filter: brightness(1.2) contrast(1.2); opacity: 1; }
+          100% { transform: scale(1, 1); opacity: 1; filter: brightness(1) contrast(1); }
+        }
+
+        main.site-destroyed {
+          animation: crtCollapse 1s cubic-bezier(0.11, 0, 0.5, 0) forwards !important;
+          transform-origin: center center;
+          will-change: transform, opacity, filter;
+        }
+
+        main.site-reconstructed {
+          animation: crtExpand 1s cubic-bezier(0.5, 1, 0.89, 1) forwards !important;
+          transform-origin: center center;
+          will-change: transform, opacity, filter;
+        }
+      `}</style>
     </>
   );
 }
